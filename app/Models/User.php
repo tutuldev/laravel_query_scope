@@ -2,44 +2,37 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
+    protected static function booted(): void{
+        static::addGlobalScope('userdetails',function(Builder $builder){
+            $builder->where('status',1);
+        });
+    }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    // protected static::addGlobalScope('userdetails',function(Builder $builder){
+    //     $builder->where('status',1);
+    // });
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+    // local scope
+    // public function scopeActive($query){
+    //     return $query->where('status',1);
+    // }
+    // public function scopeCity($query,$cityName){
+    //     return $query->where('city',$cityName);
+    // }
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function scopeCity($query,$cityName){
+        return $query->whereIn('city',$cityName);
+    }
+    public function scopeSort($query){
+        return $query->orderBy('name','asc');
+    }
 }

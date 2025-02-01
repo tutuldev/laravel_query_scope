@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Scopes\UserScope;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -87,7 +88,19 @@ class UserController extends Controller
         // ->sort()
         // ->get();
         // return $users;
-        $users = User::get();
+
+        // $users = User::get();
+        // return $users;
+
+        // without global scope
+        //  $users = User::withoutGlobalScope(UserScope::class)->get();
+        // return $users;
+
+
+         $users = User::withoutGlobalScope (UserScope::class)
+         ->city(['Delhi'])
+        ->sort()
+        ->get();
         return $users;
     }
 

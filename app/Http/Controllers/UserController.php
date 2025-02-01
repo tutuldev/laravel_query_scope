@@ -74,12 +74,20 @@ class UserController extends Controller
         // ->get();
         // return $users;
 
+        // scope method i
+        // $users = User::select("id","name","email")
+        // ->with('posts:title,description,user_id')
+        // ->city(['Delhi'])
+        // ->sort()
+        // ->get();
+        // return $users;
 
-        $users = User::select("id","name","email")
-        ->with('posts:title,description,user_id')
-        ->city(['Delhi'])
-        ->sort()
-        ->get();
+        // scope method ii
+        // $users = User::city(['Delhi'])
+        // ->sort()
+        // ->get();
+        // return $users;
+        $users = User::get();
         return $users;
     }
 
